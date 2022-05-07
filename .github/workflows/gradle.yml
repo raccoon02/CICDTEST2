@@ -9,15 +9,13 @@ name: corinne
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
     runs-on : ubuntu-20.04
-    env:
-      JASYPT_ENCRYPTOR_PASSWORD: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
 
     steps:
       - name: Checkout
@@ -48,20 +46,12 @@ jobs:
         run: cp ./appspec.yml ./deploy/
 
         # script file Copy
-      - name: Copy shell
-        run: cp ./scripts/* ./deploy/
+#      - name: Copy shell
+#        run: cp ./scripts/* ./deploy/
 
         # 압축파일 형태로 전달(codedeploy는 zip형식만 읽을 수 있음)
       - name: Make zip file
         run: zip -r -qq -j ./corinne-build.zip ./deploy
-
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
 
       - name: Upload to S3
         env:
@@ -71,7 +61,7 @@ jobs:
           aws s3 cp \
           --region ap-northeast-2 \
           --acl private \
-          ./corinne-build.zip s3://minipjtimagebucket/
+          ./corinne-build.zip s3://doitbucket/
 
       - name: deploy
         env:
@@ -79,8 +69,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws deploy create-deployment \
-          --application-name corinne-deploy \
-          --deployment-group-name corinne_project \
+          --application-name ddddd \
+          --deployment-group-name ddddd \
           --file-exists-behavior OVERWRITE \
-          --s3-location bucket=minipjtimagebucket,bundleType=zip,key=corinne-build.zip \
+          --s3-location bucket=doitbucket,bundleType=zip,key=corinne-build.zip \
           --region ap-northeast-2
