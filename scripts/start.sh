@@ -2,7 +2,7 @@
 ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH)
 source ${ABSDIR}/profile.sh
-REPOSITORY=/home/ubuntu/sparta/deploy
+REPOSITORY=/home/ubuntu/app/deploy
 
 echo "> Build 파일 복사"
 echo "> cp $REPOSITORY/*.jar $REPOSITORY/"
