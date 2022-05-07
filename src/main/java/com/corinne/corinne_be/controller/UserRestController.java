@@ -51,12 +51,6 @@ public class UserRestController {
     public MsgReponseDto InfoUpdate(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody UserRequestdto userRequestdto){
         return userService.InfoUpdate(userDetails,userRequestdto);
     }
-
-    //프로필이미지 수정
-    @PatchMapping("/api/user/image")
-    public ProfileResponseDto registImage(@RequestParam("image") MultipartFile file, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-        return userService.registImage(file, userDetails);
-    }
 }
 
 

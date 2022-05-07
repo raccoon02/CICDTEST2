@@ -10,7 +10,6 @@ import com.corinne.corinne_be.model.User;
 
 import com.corinne.corinne_be.repository.UserRepository;
 
-import com.corinne.corinne_be.s3.S3Uploader;
 import com.corinne.corinne_be.security.UserDetailsImpl;
 
 import com.corinne.corinne_be.utils.Validator;
@@ -21,17 +20,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class UserService {
-
-    private final S3Uploader s3Uploader;
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final Validator validator;
@@ -61,16 +56,6 @@ public class UserService {
         }
         user.infoUpdate(userRequestdto);
         return new MsgReponseDto(HttpStatus.OK,null);
-    }
-
-    //이미지수정
-    @Transactional
-    public ProfileResponseDto registImage(MultipartFile file, UserDetailsImpl userDetails) throws IOException {
-        Long userId = userDetails.getUser().getUserId();
-        User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
-        String imgurl = s3Uploader.upload(file, "static");
-        user.profileImgUpdate(imgurl);
-        return new ProfileResponseDto(imgurl);
     }
 
 }
